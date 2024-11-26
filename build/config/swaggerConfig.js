@@ -14,12 +14,12 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000/api",
+                url: "http://localhost:3000",
                 description: "Local server",
             },
         ],
     },
-    apis: ["./routes/*.ts"], // Specify where API documentation is defined
+    apis: ["./routes/*.ts"],
 };
 const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerOptions);
 exports.default = swaggerDocs;

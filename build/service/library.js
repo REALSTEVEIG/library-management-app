@@ -1,34 +1,44 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.returnBook = exports.borrowBook = exports.createBook = exports.getBook = exports.listBooks = exports.createUser = exports.getUser = exports.listUsers = void 0;
-const user_1 = __importDefault(require("../models/user"));
-const book_1 = __importDefault(require("../models/book"));
-const borrow_1 = __importDefault(require("../models/borrow"));
-const listUsers = async () => await user_1.default.findAll();
+const association_1 = require("../models/association");
+const listUsers = async () => await association_1.User.findAll();
 exports.listUsers = listUsers;
 const getUser = async (id) => {
-    const user = await user_1.default.findByPk(id, {
+    const user = await association_1.User.findByPk(id, {
         include: [
             {
-                model: borrow_1.default,
-                include: [book_1.default],
+                model: association_1.Borrow,
+                include: [association_1.Book],
+                required: false,
             },
         ],
     });
     if (!user)
         throw new Error("User not found");
-    return user;
+    const past = user.Borrows?.filter((borrow) => borrow.returned).map((borrow) => ({
+        name: borrow.Book?.name,
+        userScore: borrow.score,
+    })) || [];
+    const present = user.Borrows?.filter((borrow) => !borrow.returned).map((borrow) => ({
+        name: borrow.Book?.name,
+    })) || [];
+    return {
+        id: user.id,
+        name: user.name,
+        books: {
+            past,
+            present,
+        },
+    };
 };
 exports.getUser = getUser;
-const createUser = async (name) => await user_1.default.create({ name });
+const createUser = async (name) => await association_1.User.create({ name });
 exports.createUser = createUser;
-const listBooks = async () => await book_1.default.findAll();
+const listBooks = async () => await association_1.Book.findAll();
 exports.listBooks = listBooks;
 const getBook = async (id) => {
-    const book = await book_1.default.findByPk(id);
+    const book = await association_1.Book.findByPk(id);
     if (!book)
         throw new Error("Book not found");
     return {
@@ -38,17 +48,23 @@ const getBook = async (id) => {
     };
 };
 exports.getBook = getBook;
-const createBook = async (name) => await book_1.default.create({ name });
+const createBook = async (name) => await association_1.Book.create({ name });
 exports.createBook = createBook;
 const borrowBook = async (userId, bookId) => {
-    return await borrow_1.default.create({ userId, bookId });
+    const existingBorrow = await association_1.Borrow.findOne({
+        where: { bookId, returned: false },
+    });
+    if (existingBorrow) {
+        throw new Error("This book is already borrowed by another user.");
+    }
+    return await association_1.Borrow.create({ userId, bookId });
 };
 exports.borrowBook = borrowBook;
 const returnBook = async (borrowId, score) => {
-    const borrow = await borrow_1.default.findByPk(borrowId);
+    const borrow = await association_1.Borrow.findByPk(borrowId);
     if (!borrow)
         throw new Error("Borrow record not found");
-    const book = await book_1.default.findByPk(borrow.bookId);
+    const book = await association_1.Book.findByPk(borrow.bookId);
     if (!book)
         throw new Error("Book not found");
     book.ratingCount++;

@@ -44,7 +44,5 @@ Borrow.init({
     tableName: "borrows",
     timestamps: false,
 });
-Borrow.belongsTo(user_1.default, { foreignKey: "userId" });
-Borrow.belongsTo(book_1.default, { foreignKey: "bookId" });
 exports.default = Borrow;
 //# sourceMappingURL=borrow.js.map

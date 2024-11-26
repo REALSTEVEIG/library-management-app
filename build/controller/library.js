@@ -103,7 +103,12 @@ const borrowBookController = async (req, res) => {
         res.sendStatus(204);
     }
     catch (err) {
-        res.status(500).json({ error: err.message });
+        if (err.message === "This book is already borrowed by another user.") {
+            res.status(400).json({ error: err.message });
+        }
+        else {
+            res.status(500).json({ error: err.message });
+        }
     }
 };
 exports.borrowBookController = borrowBookController;
