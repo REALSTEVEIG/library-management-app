@@ -64,7 +64,7 @@ I developed a **Library Management System** as part of a backend case study. Thi
    PGPASSWORD=xxxx
    ```
 
-4. Run database migrations:
+4. Run build:
    ```bash
    npm run build
    ```
