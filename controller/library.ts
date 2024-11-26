@@ -68,14 +68,18 @@ export const createBookController = async (req: Request, res: Response) => {
 };
 
 export const borrowBookController = async (req: Request, res: Response) => {
-  handleErrors(req, res);
-  try {
-    await service.borrowBook(parseInt(req.params.userId), parseInt(req.params.bookId));
-    res.sendStatus(204);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-};
+    handleErrors(req, res);
+    try {
+      await service.borrowBook(parseInt(req.params.userId), parseInt(req.params.bookId));
+      res.sendStatus(204);
+    } catch (err: any) {
+      if (err.message === "This book is already borrowed by another user.") {
+        res.status(400).json({ error: err.message });
+      } else {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  };  
 
 export const returnBookController = async (req: Request, res: Response) => {
   handleErrors(req, res);

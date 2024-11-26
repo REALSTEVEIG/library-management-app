@@ -52,9 +52,17 @@ export const getBook = async (id: number) => {
 export const createBook = async (name: string) => await Book.create({ name });
 
 export const borrowBook = async (userId: number, bookId: number) => {
+    const existingBorrow = await Borrow.findOne({
+      where: { bookId, returned: false },
+    });
+  
+    if (existingBorrow) {
+      throw new Error("This book is already borrowed by another user.");
+    }
+  
     return await Borrow.create({ userId, bookId });
-  };  
-
+  };
+  
 export const returnBook = async (borrowId: number, score: number) => {
   const borrow = await Borrow.findByPk(borrowId);
   if (!borrow) throw new Error("Borrow record not found");
