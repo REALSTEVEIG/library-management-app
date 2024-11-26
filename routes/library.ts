@@ -210,10 +210,36 @@ export default router;
  *     responses:
  *       204:
  *         description: Book borrowed successfully
+ *       400:
+ *         description: Bad request, e.g., book already borrowed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Book already borrowed"
  *       404:
  *         description: User or book not found
- *       400:
- *         description: Book already borrowed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "User or book not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unexpected error occurred"
  */
 
 /**

@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.use("/api", libraryRoutes);
+app.use("/", libraryRoutes);
 
 sequelize.sync().then(() => {
   console.log("Database connected");
