@@ -76,6 +76,8 @@ I developed a **Library Management System** as part of a backend case study. Thi
 
 6. Access Swagger documentation at `http://localhost:3000/api-docs`.
 
+7. Live version is also available at `https://inventanalytics-e6cucchdfwb3chb8.canadacentral-01.azurewebsites.net/api-docs/`
+
 ---
 
 ## API Endpoints
