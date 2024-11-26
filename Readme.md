@@ -94,14 +94,6 @@ I developed a **Library Management System** as part of a backend case study. Thi
 
 ---
 
-## Testing
-I wrote unit tests using Jest. Run tests with:
-```bash
-npm test
-```
-
----
-
 ## Enhancements
 1. **Detailed Swagger Documentation**: API is fully documented with request/response examples.
 2. **Improved Error Handling**: Explicit error responses for invalid requests.
