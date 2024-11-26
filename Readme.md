@@ -1,4 +1,3 @@
-```markdown
 # Library Management System
 
 ## Overview
@@ -7,29 +6,30 @@ I developed a **Library Management System** as part of a backend case study. Thi
 ---
 
 ## Features
-### 1. User Management:
-   - List all users
-   - Get details of a specific user (past and current borrowed books)
-   - Create a new user
 
-### 2. Book Management:
-   - List all books
-   - Get details of a specific book (name, average rating)
-   - Create a new book
+### User Management
+- List all users
+- Get details of a specific user (past and current borrowed books)
+- Create a new user
 
-### 3. Borrowing and Returning Books:
-   - Borrow a book
-   - Return a book with a user rating
+### Book Management
+- List all books
+- Get details of a specific book (name, average rating)
+- Create a new book
 
-### 4. Error Handling:
-   - Prevent borrowing of non-existent books or by non-existent users
-   - Handle attempts to borrow already-borrowed books
+### Borrowing and Returning Books
+- Borrow a book
+- Return a book with a user rating
 
-### 5. Validation:
-   - Input validation using `express-validator`
+### Error Handling
+- Prevent borrowing of non-existent books or by non-existent users
+- Handle attempts to borrow already-borrowed books
 
-### 6. Documentation:
-   - Comprehensive API documentation using Swagger, available at `/api-docs`.
+### Validation
+- Input validation using `express-validator`
+
+### Documentation
+- Comprehensive API documentation using Swagger, available at `/api-docs`.
 
 ---
 
@@ -46,9 +46,9 @@ I developed a **Library Management System** as part of a backend case study. Thi
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/library-management.git
+   git clone https://github.com/REALSTEVEIG/library-management-app
    cd library-management
-   ```
+
 
 2. Install dependencies:
    ```bash
