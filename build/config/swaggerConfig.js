@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
@@ -14,8 +16,8 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000",
-                description: "Local server",
+                url: process.env.API_BASE_URL || "http://localhost:3000",
+                description: process.env.NODE_ENV === "production" ? "Production server" : "Local server",
             },
         ],
     },
