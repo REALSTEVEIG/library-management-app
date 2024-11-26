@@ -1,5 +1,3 @@
-### GitHub README
-
 ```markdown
 # Library Management System
 
@@ -9,28 +7,28 @@ I developed a **Library Management System** as part of a backend case study. Thi
 ---
 
 ## Features
-1. **User Management**:
+### 1. User Management:
    - List all users
    - Get details of a specific user (past and current borrowed books)
    - Create a new user
 
-2. **Book Management**:
+### 2. Book Management:
    - List all books
    - Get details of a specific book (name, average rating)
    - Create a new book
 
-3. **Borrowing and Returning Books**:
+### 3. Borrowing and Returning Books:
    - Borrow a book
    - Return a book with a user rating
 
-4. **Error Handling**:
+### 4. Error Handling:
    - Prevent borrowing of non-existent books or by non-existent users
    - Handle attempts to borrow already-borrowed books
 
-5. **Validation**:
+### 5. Validation:
    - Input validation using `express-validator`
 
-6. **Documentation**:
+### 6. Documentation:
    - Comprehensive API documentation using Swagger, available at `/api-docs`.
 
 ---
@@ -59,7 +57,7 @@ I developed a **Library Management System** as part of a backend case study. Thi
 
 3. Configure environment variables:
    Create a `.env` file:
-   ```
+   ```bash
    PGHOST=xxxx
    PGUSER=xxxx
    PGPORT=xxx
@@ -115,5 +113,3 @@ npm test
 ## Contact
 If you have questions or feedback, feel free to reach out at stephenignatiusbiz@gmail.com.
 ```
-
----
