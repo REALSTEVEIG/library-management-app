@@ -58,7 +58,4 @@ Borrow.init(
   }
 );
 
-Borrow.belongsTo(User, { foreignKey: "userId" });
-Borrow.belongsTo(Book, { foreignKey: "bookId" });
-
 export default Borrow;

@@ -1,6 +1,4 @@
-import User from "../models/user";
-import Book from "../models/book";
-import Borrow from "../models/borrow";
+import { User, Book, Borrow } from "../models/association";
 
 export const listUsers = async () => await User.findAll();
 
@@ -10,12 +8,32 @@ export const getUser = async (id: number) => {
       {
         model: Borrow,
         include: [Book],
+        required: false,
       },
     ],
   });
+
   if (!user) throw new Error("User not found");
-  return user;
+
+  const past = user.Borrows?.filter((borrow: any) => borrow.returned).map((borrow: any) => ({
+    name: borrow.Book?.name,
+    userScore: borrow.score,
+  })) || [];
+
+  const present = user.Borrows?.filter((borrow: any) => !borrow.returned).map((borrow: any) => ({
+    name: borrow.Book?.name,
+  })) || [];
+
+  return {
+    id: user.id,
+    name: user.name,
+    books: {
+      past,
+      present,
+    },
+  };
 };
+
 
 export const createUser = async (name: string) => await User.create({ name });
 

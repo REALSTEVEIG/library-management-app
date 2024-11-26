@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/config";
+import Borrow from "./borrow";
 
 interface UserAttributes {
   id?: number;
@@ -9,6 +10,7 @@ interface UserAttributes {
 class User extends Model<UserAttributes> implements UserAttributes {
   id!: number;
   name!: string;
+  Borrows: any;
 }
 
 User.init(
@@ -31,4 +33,3 @@ User.init(
 );
 
 export default User;
-

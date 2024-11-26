@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/config";
+import Borrow from "./borrow";
 
 interface BookAttributes {
   id?: number;
