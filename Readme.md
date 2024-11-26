@@ -47,7 +47,6 @@ I developed a **Library Management System** as part of a backend case study. Thi
 1. Clone the repository:
    ```bash
    git clone https://github.com/REALSTEVEIG/library-management-app
-   cd library-management
 
 
 2. Install dependencies:
