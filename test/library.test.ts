@@ -1,41 +1,123 @@
-import { createUser, createBook, borrowBook } from "../service/library";
-import User from "../models/user";
-import Book from "../models/book";
-import Borrow from "../models/borrow";
+import request from "supertest";
+import app from "../app";
+import * as service from "../service/library";
 
-jest.mock("../models/User");
-jest.mock("../models/Book");
-jest.mock("../models/Borrow");
+jest.mock("../service/library");
 
-describe("Library Service", () => {
+describe("Controller Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
+  it("should list users", async () => {
+    const mockUsers = [
+      { id: 1, name: "John Doe" },
+      { id: 2, name: "Jane Doe" },
+    ];
+    (service.listUsers as jest.Mock).mockResolvedValue(mockUsers);
+
+    const response = await request(app).get("/users");
+    expect(service.listUsers).toHaveBeenCalled();
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockUsers);
+  });
+
+  it("should get user by ID", async () => {
+    const mockUser = {
+      id: 1,
+      name: "John Doe",
+      books: { past: [], present: [] },
+    };
+    (service.getUser as jest.Mock).mockResolvedValue(mockUser);
+
+    const response = await request(app).get("/users/1");
+    expect(service.getUser).toHaveBeenCalledWith(1);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockUser);
+  });
+
   it("should create a user", async () => {
     const mockUser = { id: 1, name: "John Doe" };
-    (User.create as jest.Mock).mockResolvedValue(mockUser);
+    (service.createUser as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await createUser("John Doe");
-    expect(User.create).toHaveBeenCalledWith({ name: "John Doe" });
-    expect(result).toEqual(mockUser);
+    const response = await request(app)
+      .post("/users")
+      .send({ name: "John Doe" });
+    expect(service.createUser).toHaveBeenCalledWith("John Doe");
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(mockUser);
   });
 
   it("should create a book", async () => {
     const mockBook = { id: 1, name: "1984" };
-    (Book.create as jest.Mock).mockResolvedValue(mockBook);
+    (service.createBook as jest.Mock).mockResolvedValue(mockBook);
 
-    const result = await createBook("1984");
-    expect(Book.create).toHaveBeenCalledWith({ name: "1984" });
-    expect(result).toEqual(mockBook);
+    const response = await request(app)
+      .post("/books")
+      .send({ name: "1984" });
+    expect(service.createBook).toHaveBeenCalledWith("1984");
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(mockBook);
   });
 
-  it("should create a borrow record", async () => {
-    const mockBorrow = { id: 1, userId: 1, bookId: 1, returned: false };
-    (Borrow.create as jest.Mock).mockResolvedValue(mockBorrow);
+  it("should borrow a book", async () => {
+    (service.borrowBook as jest.Mock).mockResolvedValue(undefined);
 
-    const result = await borrowBook(1, 1);
-    expect(Borrow.create).toHaveBeenCalledWith({ userId: 1, bookId: 1 });
-    expect(result).toEqual(mockBorrow);
+    const response = await request(app).post("/users/1/borrow/2");
+    expect(service.borrowBook).toHaveBeenCalledWith(1, 2);
+    expect(response.status).toBe(204);
+  });
+
+  it("should return a book", async () => {
+    (service.returnBook as jest.Mock).mockResolvedValue(undefined);
+
+    const response = await request(app)
+      .post("/users/1/return/1")
+      .send({ score: 5 });
+    expect(service.returnBook).toHaveBeenCalledWith(1, 5);
+    expect(response.status).toBe(204);
+  });
+
+  it("should get a book by ID", async () => {
+    const mockBook = { id: 1, name: "1984", score: "4.50" };
+    (service.getBook as jest.Mock).mockResolvedValue(mockBook);
+
+    const response = await request(app).get("/books/1");
+    expect(service.getBook).toHaveBeenCalledWith(1);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockBook);
+  });
+
+  it("should list books", async () => {
+    const mockBooks = [
+      { id: 1, name: "1984" },
+      { id: 2, name: "Brave New World" },
+    ];
+    (service.listBooks as jest.Mock).mockResolvedValue(mockBooks);
+
+    const response = await request(app).get("/books");
+    expect(service.listBooks).toHaveBeenCalled();
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockBooks);
+  });
+
+  it("should handle borrow error for already borrowed book", async () => {
+    (service.borrowBook as jest.Mock).mockRejectedValue(
+      new Error("This book is already borrowed by another user.")
+    );
+
+    const response = await request(app).post("/users/1/borrow/2");
+    expect(service.borrowBook).toHaveBeenCalledWith(1, 2);
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "This book is already borrowed by another user." });
+  });
+
+  it("should handle user not found", async () => {
+    (service.getUser as jest.Mock).mockRejectedValue(new Error("User not found"));
+
+    const response = await request(app).get("/users/999");
+    expect(service.getUser).toHaveBeenCalledWith(999);
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: "User not found" });
   });
 });
