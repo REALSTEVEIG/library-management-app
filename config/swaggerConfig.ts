@@ -9,7 +9,7 @@ const swaggerOptions = {
     info: {
       title: "Library Management API",
       version: "1.0.0",
-      description: "API for managing library members and book borrowing/returning",
+      description: "API for managing library members and book borrowing/returning..",
     },
     servers: [
       {
